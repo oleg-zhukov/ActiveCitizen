@@ -12,17 +12,17 @@
     <header>
       <nav class="navbar navbar-light bg-light">
           <h1>Единая дежурно-диспетчерская служба 112 </h1>
-          <a class="navbar-brand" href="/map">Карта вызовов</a>
+          <a class="nav-brand" href="/map">Карта вызовов</a>
           {% if current_user.is_authenticated %}
           <div class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+          <a class="nav-brand dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Вызовы </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="/calls">Список вызовов</a>
                     <a class="dropdown-item" href="/add_call">Новый вызов</a>
                 </div>
           </div>
-          <a class="navbar-brand" href="/logout">{{current_user.name}} {{current_user.surname}}(выход)</a>
+          <a class="navbar-link" href="/logout">{{current_user.name}} {{current_user.surname}}(выход)</a>
           {% else %}
             <p>
                 <a class="btn btn-success" href="/login">Войти</a>

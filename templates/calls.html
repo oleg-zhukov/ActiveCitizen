@@ -3,40 +3,59 @@
 {% block content %}
 <meta charset="UTF-8">
 
-<h2 align="center">Вызовы аварийных служб</h2>
-{% for call in calls %}
-<h3>Вызов  # {{ call.id }}</h3>
+<br>
 {% if current_user.is_authenticated %}
-    <div>
-        <a href="/calls/{{ call.id }}" class="btn btn-warning">
-            Изменить
-        </a>
-        <a href="/delete_call/{{ call.id }}" class="btn btn-danger">
-            Удалить
-        </a>
-    </div>
+    <a href="/add_call" class="btn btn-secondary">Новый вызов</a>
 {% endif %}
+<br>
+<h2 align="center">Вызовы аварийных служб</h2>
+<br>
 <div class="table_container">
     <table class="my_table">
         <tr class="my_row">
-            <td class="title" width="400px" bgcolor="#dddddd">Сообщение</td>
-            <td class="title" width="200px" bgcolor="#dddddd" align="center">Адрес</td>
+            <td class="title" width="20px" bgcolor="#dddddd" align="center">Номер</td>
+            <td class="title" width="100px" bgcolor="#dddddd" align="center">Время</td>
+            <td class="title" width="400px" bgcolor="#dddddd" align="center">Сообщение</td>
+            <td class="title" width="100px" bgcolor="#dddddd" align="center">Адрес</td>
             <td class="title" width="100px" bgcolor="#dddddd" align="center">Служба</td>
             <td class="title" width="100px" bgcolor="#dddddd" align="center">Статус</td>
+            <td class="title" width="100px" bgcolor="#dddddd" align="center">Действия</td>
         </tr>
+        {% for call in calls %}
+            {% if call.service == "fire"%}
+                  {% set color = "#ffeeee" %}
+            {% endif %}
+            {% if call.service == "police"%}
+                  {% set color = "#eeeeff" %}
+            {% endif %}
+            {% if call.service == "ambulance"%}
+                  {% set color = "#eeffee" %}
+            {% endif %}
         <tr class="my_row">
-            <td class="ordinary" bgcolor="#eeeeff">{{ call.message }}</td>
-            <td class="ordinary" bgcolor="#eeeeff" align="center">{{ call.address }}</td>
-            <td class="ordinary" bgcolor="#eeeeff" align="center">{{ call.service }}</td>
-            <td class="ordinary" bgcolor="#eeffee" align="center">{{ call.status }}</td>
+            <td class="ordinary" bgcolor ={{color}} align="center">{{ call.id }}</td>
+            <td class="ordinary" bgcolor ={{color}}>{{ call.call_time.strftime("%d.%m.%Y %H:%M:%S") }}</td>
+            <td class="ordinary" bgcolor ={{color}}>{{ call.message }}</td>
+            <td class="ordinary" bgcolor ={{color}}>{{ call.address }}</td>
+            <td class="ordinary" bgcolor ={{color}}>
+                <fieldset id="group1">
+                    <input type="radio" value="fire" name="service"> Пожарная охрана <br>
+                    <input type="radio" value="police" name="service"> Полиция <br>
+                    <input type="radio" value="ambulance" name="service"> Скорая помощь <br>
+                </fieldset>
+                <a href="/calls/{{ call.id }}">  {{ call.service }}  </a>
+            </td>
+            <td class="ordinary" bgcolor ={{color}} align="center">{{ call.status }}</td>
+            <td class="ordinary" bgcolor ={{color}} align="center">
+                {% if current_user.is_authenticated %}
+                <div>       <a href="/calls/{{ call.id }}" class="btn btn-warning">  ...  </a>
+                            <a href="/delete_call/{{ call.id }}" class="btn btn-danger">  X  </a>
+                </div>
+                {% endif %}
+            </td>
         </tr>
+        {% endfor %}
     </table>
 </div>
-<br>
-{% endfor %}
-{% if current_user.is_authenticated %}
-    <a href="/add_call" class="btn btn-secondary">Добавить вызов</a>
-{% endif %}
 
 
 {% endblock %}
