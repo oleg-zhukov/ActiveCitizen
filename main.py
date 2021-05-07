@@ -97,6 +97,8 @@ def add_call():
         call.message = form.message.data
         call.address  = form.address.data
         call.recognize_call()
+        print(call.to_dict(only=(
+                'message', 'address', 'status', 'service', 'call_time', 'finish_time')))
         db_sess.add(call)
         db_sess.commit()
         return redirect('/calls')
