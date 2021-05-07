@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<meta charset="UTF-8">
+
+<h2 align="center">Вызовы аварийных служб</h2>
+{% for call in calls %}
+<h3>Вызов  # {{ call.id }}</h3>
+{% if current_user.is_authenticated %}
+    <div>
+        <a href="/calls/{{ call.id }}" class="btn btn-warning">
+            Изменить
+        </a>
+        <a href="/delete_call/{{ call.id }}" class="btn btn-danger">
+            Удалить
+        </a>
+    </div>
+{% endif %}
+<div class="table_container">
+    <table class="my_table">
+        <tr class="my_row">
+            <td class="title" width="400px" bgcolor="#dddddd">Сообщение</td>
+            <td class="title" width="200px" bgcolor="#dddddd" align="center">Адрес</td>
+            <td class="title" width="100px" bgcolor="#dddddd" align="center">Служба</td>
+            <td class="title" width="100px" bgcolor="#dddddd" align="center">Статус</td>
+        </tr>
+        <tr class="my_row">
+            <td class="ordinary" bgcolor="#eeeeff">{{ call.message }}</td>
+            <td class="ordinary" bgcolor="#eeeeff" align="center">{{ call.address }}</td>
+            <td class="ordinary" bgcolor="#eeeeff" align="center">{{ call.service }}</td>
+            <td class="ordinary" bgcolor="#eeffee" align="center">{{ call.status }}</td>
+        </tr>
+    </table>
+</div>
+<br>
+{% endfor %}
+{% if current_user.is_authenticated %}
+    <a href="/add_call" class="btn btn-secondary">Добавить вызов</a>
+{% endif %}
+
+
+{% endblock %}

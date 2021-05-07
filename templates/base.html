@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>{{title}}</title>
+</head>
+  <body>
+    <header>
+      <nav class="navbar navbar-light bg-light">
+          <h1>Единая дежурно-диспетчерская служба 112 </h1>
+          <a class="navbar-brand" href="/map">Карта вызовов</a>
+          {% if current_user.is_authenticated %}
+          <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Вызовы </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/calls">Список вызовов</a>
+                    <a class="dropdown-item" href="/add_call">Новый вызов</a>
+                </div>
+          </div>
+          <a class="navbar-brand" href="/logout">{{current_user.name}} {{current_user.surname}}(выход)</a>
+          {% else %}
+            <p>
+                <a class="btn btn-success" href="/login">Войти</a>
+                <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+            </p>
+          {% endif %}
+      </nav>
+    </header>
+    <!-- Begin page content -->
+    <main role="main" class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+  </body>
+</html>
