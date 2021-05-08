@@ -2,6 +2,9 @@
 
 {% block content %}
 <meta charset="UTF-8">
+{% set COLORS = {"fire": "#ffeeee", "police": "#eeeeff", "ambulance":  "#eeffee"} %}
+{% set SERVICES = {"fire": "Пожарная", "police": "Полиция", "ambulance":  "Скорая"} %}
+{% set STATUSES  = {"received": "Принят", "serviced": "Выполняется", "finished":  "Завершен"} %}
 
 <br>
 {% if current_user.is_authenticated %}
@@ -14,37 +17,28 @@
     <table class="my_table">
         <tr class="my_row">
             <td class="title" width="20px" bgcolor="#dddddd" align="center">Номер</td>
-            <td class="title" width="100px" bgcolor="#dddddd" align="center">Время</td>
-            <td class="title" width="400px" bgcolor="#dddddd" align="center">Сообщение</td>
-            <td class="title" width="100px" bgcolor="#dddddd" align="center">Адрес</td>
-            <td class="title" width="100px" bgcolor="#dddddd" align="center">Служба</td>
-            <td class="title" width="100px" bgcolor="#dddddd" align="center">Статус</td>
+            <td class="title" width="60px" bgcolor="#dddddd" align="center">Время</td>
+            <td class="title" width="300px" bgcolor="#dddddd" align="center">Сообщение</td>
+            <td class="title" width="400px" bgcolor="#dddddd" align="center">Адрес</td>
+            <td class="title" width="60px" bgcolor="#dddddd" align="center">Служба</td>
+            <td class="title" width="60px" bgcolor="#dddddd" align="center">Статус</td>
             <td class="title" width="100px" bgcolor="#dddddd" align="center">Действия</td>
         </tr>
         {% for call in calls %}
-            {% if call.service == "fire"%}
-                  {% set color = "#ffeeee" %}
-            {% endif %}
-            {% if call.service == "police"%}
-                  {% set color = "#eeeeff" %}
-            {% endif %}
-            {% if call.service == "ambulance"%}
-                  {% set color = "#eeffee" %}
-            {% endif %}
+            {% set color = COLORS[call.service]  %}
         <tr class="my_row">
             <td class="ordinary" bgcolor ={{color}} align="center">{{ call.id }}</td>
             <td class="ordinary" bgcolor ={{color}}>{{ call.call_time.strftime("%d.%m.%Y %H:%M:%S") }}</td>
             <td class="ordinary" bgcolor ={{color}}>{{ call.message }}</td>
-            <td class="ordinary" bgcolor ={{color}}>{{ call.address }}</td>
             <td class="ordinary" bgcolor ={{color}}>
-                <fieldset id="group1">
-                    <input type="radio" value="fire" name="service"> Пожарная охрана <br>
-                    <input type="radio" value="police" name="service"> Полиция <br>
-                    <input type="radio" value="ambulance" name="service"> Скорая помощь <br>
-                </fieldset>
-                <a href="/calls/{{ call.id }}">  {{ call.service }}  </a>
+                <span class="ymaps-geolink">
+                        {{ call.address }}
+                </span>
             </td>
-            <td class="ordinary" bgcolor ={{color}} align="center">{{ call.status }}</td>
+            <td class="ordinary" bgcolor ={{color}}>
+                {{ SERVICES[call.service] }}
+            </td>
+            <td class="ordinary" bgcolor ={{color}} align="center">{{ STATUSES[call.status] }}</td>
             <td class="ordinary" bgcolor ={{color}} align="center">
                 {% if current_user.is_authenticated %}
                 <div>       <a href="/calls/{{ call.id }}" class="btn btn-warning">  ...  </a>
