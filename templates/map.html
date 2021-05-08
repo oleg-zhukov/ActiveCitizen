@@ -1,6 +1,19 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block head %}
 <meta charset="UTF-8">
-<h2 align="center">Карта происшествий</h2>
+<script src="https://api-maps.yandex.ru/2.1/?apikey=40d1649f-0493-4b70-98ba-98533de7710b&lang=ru_RU"></script>
+<script>
+     police = {{police}};
+     fire = {{fire}};
+     amb = {{amb}};
+</script>
+<script src="/static/map.js"></script>
 {% endblock %}
+
+{% block content %}
+<h2 align="center">Карта вызовов спасательных служб</h2>
+<div id="map" style="width:1000px; height:600px"></div>
+{% endblock %}
+
+

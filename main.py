@@ -85,8 +85,21 @@ def index():
     db_sess = db_session.create_session()
     calls = db_sess.query(Call).all()
     db_sess.commit()
-    return render_template('map.html', calls=calls)
-    # return render_template('map.html')
+    police = []
+    fire = []
+    amb = []
+    coords = []
+    for call in calls:
+        coord = [float(x) for x in call.point.split()]
+        coord[1], coord[0] = coord[0], coord[1]
+        coords.append(coord) # посчитать центр и масштаб?
+        if call.service == "police":
+            police.append([coord, call.id])
+        elif call.service == "fire":
+            fire.append([coord, call.id])
+        else:
+            amb.append([coord, call.id])
+    return render_template('map.html', police=police, fire=fire, amb=amb)
 
 
 @app.route('/add_call', methods=['GET', 'POST'])

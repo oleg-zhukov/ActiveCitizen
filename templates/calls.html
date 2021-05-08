@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block head %}
+<meta charset="UTF-8">
+<script src="https://api-maps.yandex.ru/2.1/?apikey=40d1649f-0493-4b70-98ba-98533de7710b&lang=ru_RU&load=Geolink"></script>
+{% endblock %}
+
+
+
+
 {% block content %}
 <meta charset="UTF-8">
 {% set COLORS = {"fire": "#ffeeee", "police": "#eeeeff", "ambulance":  "#eeffee"} %}
@@ -11,7 +19,7 @@
     <a href="/add_call" class="btn btn-secondary">Новый вызов</a>
 {% endif %}
 <br>
-<h2 align="center">Вызовы аварийных служб</h2>
+<h2 align="center">Вызовы спасательных служб</h2>
 <br>
 <div class="table_container">
     <table class="my_table">

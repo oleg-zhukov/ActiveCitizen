@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" type="image/png" href="/static/favicon-32x32.png" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -8,11 +9,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=40d1649f-0493-4b70-98ba-98533de7710b&lang=ru_RU&load=Geolink"></script>
     <title>{{title}}</title>
+    {% block head %}
+    {% endblock %}
 </head>
   <body>
     <header>
       <nav class="navbar navbar-light bg-light">
-          <h1>Единая дежурно-диспетчерская служба 112 </h1>
+          <img src="/static/112.jpeg" height = "70px" ></img>
+          <h1>Единая Дежурно-Диспетчерская Служба 112 </h1>
           <a class="nav-brand" href="/map">Карта вызовов</a>
           {% if current_user.is_authenticated %}
           <div class="nav-item dropdown">
