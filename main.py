@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, request, abort, make_response, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from data import db_session
+from data import db_session, call_resource
 from data.users import User
 from data.calls import Call
 from forms.addcallform import AddCallForm
@@ -27,7 +27,10 @@ def load_user(user_id):
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
+    if request.path.startswith('/api/'):
+        return jsonify({'error': 'url not found'}), 404
+    else:
+        return render_template('404.html', title='Страница не найдена'), 404
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -88,11 +91,9 @@ def index():
     police = []
     fire = []
     amb = []
-    coords = []
     for call in calls:
         coord = [float(x) for x in call.point.split()]
         coord[1], coord[0] = coord[0], coord[1]
-        coords.append(coord) # посчитать центр и масштаб?
         if call.service == "police":
             police.append([coord, call.id])
         elif call.service == "fire":
@@ -112,8 +113,6 @@ def add_call():
         call.message = form.message.data
         call.address = form.address.data
         call.recognize_call()
-        #print(call.to_dict(only=(
-        #    'message', 'address', 'status', 'service', 'call_time', 'finish_time')))
         db_sess.add(call)
         db_sess.commit()
         return redirect('/calls')
@@ -181,9 +180,8 @@ def delete_call(call_id):
 
 def main():
     db_session.global_init("db/emergency.db")
-    # для списка объектов
-    # api.add_resource(UserListResource, '/api/v2/users')
-    # api.add_resource(UserResource, '/api/v2/users/<int:id>')
+    api.add_resource(call_resource.CallListResource, '/api/calls')
+    api.add_resource(call_resource.CallResource, '/api/calls/<int:id>')
     app.run(debug=True)
 
 

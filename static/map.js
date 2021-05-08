@@ -71,8 +71,9 @@ function init()
         // Размещение геообъекта на карте.
         myMap.geoObjects.add(myGeoObject);
     }
-
-    myMap.setBounds(myMap.geoObjects.getBounds())
+    myMap.controls.remove('fullscreenControl');
+    myMap.controls.remove('trafficControl');
+    myMap.setBounds(myMap.geoObjects.getBounds());
 }
 
 
