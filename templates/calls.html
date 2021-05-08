@@ -16,13 +16,13 @@
 <div class="table_container">
     <table class="my_table">
         <tr class="my_row">
-            <td class="title" width="20px" bgcolor="#dddddd" align="center">Номер</td>
-            <td class="title" width="60px" bgcolor="#dddddd" align="center">Время</td>
-            <td class="title" width="300px" bgcolor="#dddddd" align="center">Сообщение</td>
-            <td class="title" width="400px" bgcolor="#dddddd" align="center">Адрес</td>
-            <td class="title" width="60px" bgcolor="#dddddd" align="center">Служба</td>
-            <td class="title" width="60px" bgcolor="#dddddd" align="center">Статус</td>
-            <td class="title" width="100px" bgcolor="#dddddd" align="center">Действия</td>
+            <td class="title" width="2%" bgcolor="#dddddd" align="center">Номер</td>
+            <td class="title" width="5%" bgcolor="#dddddd" align="center">Время</td>
+            <td class="title" width="40%" bgcolor="#dddddd" align="center">Сообщение</td>
+            <td class="title" width="35%" bgcolor="#dddddd" align="center">Адрес</td>
+            <td class="title" width="4%" bgcolor="#dddddd" align="center">Служба</td>
+            <td class="title" width="6%" bgcolor="#dddddd" align="center">Статус</td>
+            <td class="title" width="8%" bgcolor="#dddddd" align="center">Действия</td>
         </tr>
         {% for call in calls %}
             {% set color = COLORS[call.service]  %}

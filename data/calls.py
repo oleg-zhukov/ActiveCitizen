@@ -1,9 +1,9 @@
 import datetime
 import sqlalchemy
 import requests
-from sqlalchemy import orm
 from sqlalchemy_serializer import SerializerMixin
 from .db_session import SqlAlchemyBase
+
 
 def predict_service(text):
     '''
@@ -29,9 +29,9 @@ class Call(SqlAlchemyBase, SerializerMixin):
     service = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     status = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     call_time = sqlalchemy.Column(sqlalchemy.DateTime,
-                                      default=datetime.datetime.now())
+                                  default=datetime.datetime.now())
     finish_time = sqlalchemy.Column(sqlalchemy.DateTime,
-                                     nullable=True)
+                                    nullable=True)
 
     def recognize_call(self):
         '''
@@ -39,10 +39,29 @@ class Call(SqlAlchemyBase, SerializerMixin):
         '''
         # определяем какую службу вызвать
         self.service = predict_service(self.message)
+        self.change_address(self.address)
+        self.change_status("received")
+
+    def change_status(self, new_status):
+        '''
+        Изменяет статус вызова received -> serviced -> finished
+        :param new_status: новый статус
+        '''
+        if new_status == "received":
+            self.call_time = datetime.datetime.now()
+        elif new_status == "finished":
+            self.finish_time = datetime.datetime.now()
+        self.status = new_status
+
+    def change_address(self, new_address):
+        '''
+        Изменяет адрес, обновляет координаты вызова
+        :param new_status: новый статус
+        '''
         geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
         geocoder_params = {
             "apikey": "40d1649f-0493-4b70-98ba-98533de7710b",
-            "geocode": self.address.strip(),
+            "geocode": new_address.strip(),
             "format": "json"}
 
         response = requests.get(geocoder_api_server, params=geocoder_params)
@@ -55,7 +74,7 @@ class Call(SqlAlchemyBase, SerializerMixin):
         json_response = response.json()
         # Получаем количество топонимов
         count = int(json_response["response"]["GeoObjectCollection"][
-            "metaDataProperty"]["GeocoderResponseMetaData"]["found"])
+                        "metaDataProperty"]["GeocoderResponseMetaData"]["found"])
         if count == 0:
             raise LookupError("Не существует адрес")
 
@@ -64,17 +83,3 @@ class Call(SqlAlchemyBase, SerializerMixin):
             "featureMember"][0]["GeoObject"]
         self.point = toponym["Point"]["pos"]
         self.address = toponym["metaDataProperty"]["GeocoderMetaData"]["text"]
-
-        self.change_status("received")
-
-
-    def change_status(self, new_status):
-        '''
-        Изменяет статус вызова received -> serviced -> finished
-        :param new_status: новый статус
-        '''
-        if new_status == "received":
-            self.call_time = datetime.datetime.now()
-        elif new_status == "finished":
-            self.finish_time = datetime.datetime.now()
-        self.status = new_status

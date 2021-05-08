@@ -99,8 +99,8 @@ def add_call():
         call.message = form.message.data
         call.address = form.address.data
         call.recognize_call()
-        print(call.to_dict(only=(
-            'message', 'address', 'status', 'service', 'call_time', 'finish_time')))
+        #print(call.to_dict(only=(
+        #    'message', 'address', 'status', 'service', 'call_time', 'finish_time')))
         db_sess.add(call)
         db_sess.commit()
         return redirect('/calls')
@@ -120,6 +120,9 @@ def edit_call(call_id):
             form.address.data = call.address
             form.service.data = call.service
             form.status.data = call.status
+            if call.point:
+                x, y = call.point.split()
+                form.point = f"{x},{y}"
         else:
             abort(404)
     if form.validate_on_submit():
@@ -127,8 +130,8 @@ def edit_call(call_id):
         call = db_sess.query(Call).filter(Call.id == call_id).first()
         if call:
             call.message = form.message.data
-            call.address = form.address.data
             call.service = form.service.data
+            call.change_address(form.address.data)
             call.change_status(form.status.data)
             db_sess.commit()
             return redirect('/calls')

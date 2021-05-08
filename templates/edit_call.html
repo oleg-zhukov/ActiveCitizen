@@ -6,17 +6,8 @@
     {{ form.hidden_tag() }}
     <p>
         {{ form.message.label }}<br>
-        {{ form.message(class="form-control") }}<br>
+        {{ form.message(class="form-control") }}
         {% for error in form.message.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.address.label }}<br>
-        {{ form.address(class="form-control") }}<br>
-        {% for error in form.address.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
@@ -49,6 +40,21 @@
                 {{ error }}
             </p>
         {% endfor %}
+    </p>
+    <p>
+        {{ form.address.label }}<br>
+        {{ form.address(class="form-control") }}
+        <br>
+        {% for error in form.address.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
+        {% if form.point %}
+            <img src="https://static-maps.yandex.ru/1.x/?ll={{form.point}}&size=300,300&z=16&l=map&pt={{form.point}},comma">
+        {% endif %}
     </p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     {{message}}
