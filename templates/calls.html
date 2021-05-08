@@ -41,8 +41,7 @@
             <td class="ordinary" bgcolor ={{color}} align="center">{{ STATUSES[call.status] }}</td>
             <td class="ordinary" bgcolor ={{color}} align="center">
                 {% if current_user.is_authenticated %}
-                <div>       <a href="/calls/{{ call.id }}" class="btn btn-warning">  ...  </a>
-                            <a href="/delete_call/{{ call.id }}" class="btn btn-danger">  X  </a>
+                <div>       <a href="/calls/{{ call.id }}" class="btn btn-warning">.....</a>
                 </div>
                 {% endif %}
             </td>

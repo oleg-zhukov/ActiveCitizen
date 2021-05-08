@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Редактировать вызов</h1>
+<h1> Редактирование вызова </h1>
 <form action="" method="post">
     {{ form.hidden_tag() }}
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}
+        <a href="/delete_call/{{ form.call_id }}" class="btn btn-danger"> Удалить вызов </a>
+    </p>
     <p>
         {{ form.message.label }}<br>
         {{ form.message(class="form-control") }}
@@ -56,7 +59,6 @@
             <img src="https://static-maps.yandex.ru/1.x/?ll={{form.point}}&size=300,300&z=16&l=map&pt={{form.point}},comma">
         {% endif %}
     </p>
-    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     {{message}}
 </form>
 {% endblock %}

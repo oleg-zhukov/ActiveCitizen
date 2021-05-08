@@ -120,6 +120,7 @@ def edit_call(call_id):
             form.address.data = call.address
             form.service.data = call.service
             form.status.data = call.status
+            form.call_id = call_id
             if call.point:
                 x, y = call.point.split()
                 form.point = f"{x},{y}"
@@ -151,6 +152,18 @@ def calls():
     db_sess.commit()
     return render_template('calls.html', calls=calls)
 
+
+@app.route('/delete_call/<int:call_id>', methods=['GET', 'POST'])
+@login_required
+def delete_call(call_id):
+    db_sess = db_session.create_session()
+    call = db_sess.query(Call).filter(Call.id == call_id).first()
+    if call:
+        db_sess.delete(call)
+        db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/calls')
 
 
 def main():
