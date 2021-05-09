@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, request, abort, jsonify
-from flask_login import LoginManager, login_user, login_required, logout_user
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_moment import Moment
 from flask_restful import Api
 from data import db_session, call_resource
@@ -132,20 +132,21 @@ def logout():
 @app.route('/')
 def index():
     db_sess = db_session.create_session()
-    calls = db_sess.query(Call).all()
+    calls = db_sess.query(Call).filter(Call.status != 'finished').all()
     db_sess.commit()
     police = []
     fire = []
     amb = []
     for call in calls:
-        coord = [float(x) for x in call.point.split()]
-        coord[1], coord[0] = coord[0], coord[1]
-        if call.service == "police":
-            police.append([coord, call.id])
-        elif call.service == "fire":
-            fire.append([coord, call.id])
-        else:
-            amb.append([coord, call.id])
+        if call.point:
+            coord = [float(x) for x in call.point.split()]
+            coord[1], coord[0] = coord[0], coord[1]
+            if call.service == "police":
+                police.append([coord, call.id if current_user.is_authenticated else 0])
+            elif call.service == "fire":
+                fire.append([coord, call.id if current_user.is_authenticated else 0])
+            else:
+                amb.append([coord, call.id if current_user.is_authenticated else 0])
     return render_template('map.html', police=police, fire=fire, amb=amb)
 
 
@@ -225,17 +226,19 @@ def delete_call(call_id):
         abort(404)
     return redirect('/calls')
 
+
 @app.route('/calls/post', methods=['POST'])
 def alice_add_call():
     return call_process()
+
 
 def main():
     db_session.global_init("db/emergency.db")
     api.add_resource(call_resource.CallListResource, '/api/calls')
     api.add_resource(call_resource.CallResource, '/api/calls/<int:id>')
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
-    #app.run(debug=True)
+    # port = int(os.environ.get("PORT", 5000))
+    # app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
 
 
 if __name__ == '__main__':

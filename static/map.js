@@ -12,7 +12,7 @@ function init()
     {
         // Создание метки.
         var myGeoObject = new ymaps.Placemark(police[p][0], // координаты точки
-            { balloonContent: '<a href="/calls/' + police[p][1].toString() + '" target="_blank" >Смотреть вызов</a>'},
+            { balloonContent: police[p][1] > 0 ? '<a href="/calls/' + police[p][1].toString() + '" target="_blank" >Смотреть вызов</a>' : ''},
             {
             // Опции.
             // Необходимо указать данный тип макета.
@@ -33,7 +33,7 @@ function init()
     {
         // Создание метки.
         var myGeoObject = new ymaps.Placemark(fire[p][0], // координаты точки
-            { balloonContent: '<a href="/calls/' + fire[p][1].toString() + '" target="_blank" >Смотреть вызов</a>'},
+            { balloonContent: fire[p][1] > 0 ? '<a href="/calls/' + fire[p][1].toString() + '" target="_blank" >Смотреть вызов</a>' : ''},
             {
             // Опции.
             // Необходимо указать данный тип макета.
@@ -54,7 +54,7 @@ function init()
     {
         // Создание метки.
         var myGeoObject = new ymaps.Placemark(amb[p][0], // координаты точки
-            { balloonContent: '<a href="/calls/' + amb[p][1].toString() + '" target="_blank" >Смотреть вызов</a>'},
+            { balloonContent: amb[p][1] > 0 ? '<a href="/calls/' + amb[p][1].toString() + '" target="_blank" >Смотреть вызов</a>' : 0},
             //{ preset: 'islands#greenDotIcon' });
             {
             // Опции.

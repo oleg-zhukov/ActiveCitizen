@@ -15,7 +15,15 @@ def abort_if_call_not_found(id):
 
 
 class CallResource(Resource):
+    """
+    API для вызовов
+    """
     def get(self, id):
+        """
+        Возврашает вызов
+        :param id: id вызова
+        :return: json c информауией об одном вызове
+        """
         abort_if_call_not_found(id)
         session = db_session.create_session()
         call = session.query(Call).get(id)
@@ -25,8 +33,14 @@ class CallResource(Resource):
 
 
 class CallListResource(Resource):
-
+    """
+    API для списка  вызовов
+    """
     def get(self):
+        """
+        Возвращает список вызовов
+        :return:  json c информауией о вызовах
+        """
         session = db_session.create_session()
         calls = session.query(Call).all()
         return jsonify({'calls': [item.to_dict(
@@ -34,6 +48,10 @@ class CallListResource(Resource):
             for item in calls]})
 
     def post(self):
+        """
+        Добавляет вызов
+        :return:  номер вызова или информацию об ошибке
+        """
         args = parser.parse_args()
         session = db_session.create_session()
         call = Call(
@@ -43,11 +61,10 @@ class CallListResource(Resource):
         try:
             call.recognize_call()
             session.add(call)
+            session.commit()
             result = jsonify({'success': call.id})
         except:
             result = jsonify({'error': 'address not found'})
-        finally:
-            session.commit()
         return result
 
 

@@ -15,7 +15,12 @@ class AddressRequired:
         self.unique=unique
 
     def __call__(self, form, field):
-
+        """
+        Проверяет адрес
+        :param form: Форма
+        :param field: Поле
+        :return: Бросает исключение, если адрес неверный
+        """
         if len(field.data.strip()) == 0:
             raise ValidationError(self.message)
 
