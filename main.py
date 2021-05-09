@@ -173,6 +173,8 @@ def edit_call(call_id):
             form.service.data = call.service
             form.status.data = call.status
             form.call_id = call_id
+            form.call_time = call.call_time
+            form.finish_time = call.finish_time
             if call.point:
                 x, y = call.point.split()
                 form.point = f"{x},{y}"

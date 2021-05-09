@@ -5,7 +5,13 @@
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}
-        <a href="/delete_call/{{ form.call_id }}" class="btn btn-danger"> Удалить вызов </a>
+        <a href="/delete_call/{{ form.call_id }}" class="btn btn-danger"> Удалить вызов </a> &nbsp;&nbsp;
+        Время приема: {{ form.call_time.strftime("%d.%m.%Y %H:%M:%S") }} &nbsp;&nbsp;
+        {% if form.finish_time %}
+            Время завершения: {{ form.finish_time.strftime("%d.%m.%Y %H:%M:%S") }}
+        {% else %}
+            Вызов еще обслуживается
+        {% endif %}
     </p>
     <p>
         {{ form.message.label }}<br>
