@@ -27,7 +27,8 @@
                     <a class="dropdown-item" href="/add_call">Новый вызов</a>
                 </div>
           </div>
-          <a class="navbar-link" href="/logout">{{current_user.name}} {{current_user.surname}}(выход)</a>
+          <a class="navbar-link" href="/users/{{current_user.id}}">{{current_user.name}} {{current_user.surname}}</a>
+          <a class="navbar-link" href="/logout">Выход</a>
           {% else %}
             <p>
                 <a class="btn btn-success" href="/login">Войти</a>

@@ -43,10 +43,11 @@ class CallListResource(Resource):
         try:
             call.recognize_call()
             session.add(call)
-            result = jsonify({'success': 'OK'})
+            result = jsonify({'success': call.id})
         except:
             result = jsonify({'error': 'address not found'})
         finally:
             session.commit()
         return result
+
 

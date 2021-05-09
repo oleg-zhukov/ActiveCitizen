@@ -5,6 +5,7 @@ from data.users import User
 from data.calls import Call
 from forms.addcallform import AddCallForm
 from forms.editcallform import EditCallForm
+from forms.edituserform import EditUserForm
 from forms.loginform import LoginForm
 from forms.registerform import RegisterForm
 from flask_restful import Api
@@ -58,6 +59,45 @@ def reqister():
         db_sess.commit()
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
+
+@app.route('/users/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_user(id):
+    form = EditUserForm()
+    if request.method == "GET":
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == id).first()
+        if user:
+            form.email.data = user.email
+            form.name.data = user.name
+            form.surname.data = user.surname
+            form.locality.data = user.locality
+            form.position.data = user.position
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        if form.password.data != form.password_again.data:
+            return render_template('edit_user.html', title='Профиль оператора',
+                                   form=form,
+                                   message="Пароли не совпадают")
+        db_sess = db_session.create_session()
+        if db_sess.query(User).filter(User.email == form.email.data, User.id != id).first():
+            return render_template('edit_user.html', title='Профиль оператора',
+                                   form=form,
+                                   message="Такой пользователь уже есть")
+        user = db_sess.query(User).filter(User.id == id).first()
+        if user:
+            user.email = form.email.data
+            user.name = form.name.data
+            user.surname = form.surname.data
+            user.locality = form.locality.data
+            user.position = form.position.data
+            user.set_password(form.password.data)
+            db_sess.commit()
+            return redirect('/login')
+        else:
+            abort(404)
+    return render_template('edit_user.html', title='Профиль оператора', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
