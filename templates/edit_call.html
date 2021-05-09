@@ -6,9 +6,9 @@
     {{ form.hidden_tag() }}
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}
         <a href="/delete_call/{{ form.call_id }}" class="btn btn-danger"> Удалить вызов </a> &nbsp;&nbsp;
-        Время приема: {{ form.call_time.strftime("%d.%m.%Y %H:%M:%S") }} &nbsp;&nbsp;
-        {% if form.finish_time %}
-            Время завершения: {{ form.finish_time.strftime("%d.%m.%Y %H:%M:%S") }}
+        Время приема: {{ moment(form.call_time).format("DD.MM.YYYY HH:mm:ss") }} &nbsp;&nbsp;
+        {% if form.status.data == "finished" %}
+            Время завершения: {{ moment(form.finish_time).format("DD.MM.YYYY HH:mm:ss") }}
         {% else %}
             Вызов еще обслуживается
         {% endif %}

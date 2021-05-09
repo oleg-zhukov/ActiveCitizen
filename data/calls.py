@@ -1,6 +1,7 @@
 import datetime
 import sqlalchemy
 import requests
+from sqlalchemy import null
 from sqlalchemy_serializer import SerializerMixin
 from .db_session import SqlAlchemyBase
 
@@ -29,7 +30,7 @@ class Call(SqlAlchemyBase, SerializerMixin):
     service = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     status = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     call_time = sqlalchemy.Column(sqlalchemy.DateTime,
-                                  default=datetime.datetime.now())
+                                  default=datetime.datetime.utcnow())
     finish_time = sqlalchemy.Column(sqlalchemy.DateTime,
                                     nullable=True)
 
@@ -48,9 +49,9 @@ class Call(SqlAlchemyBase, SerializerMixin):
         :param new_status: новый статус
         """
         if new_status == "received":
-            self.call_time = datetime.datetime.now()
+            self.call_time = datetime.datetime.utcnow()
         elif new_status == "finished":
-            self.finish_time = datetime.datetime.now()
+            self.finish_time = datetime.datetime.utcnow()
         self.status = new_status
 
     def change_address(self, new_address):

@@ -1,5 +1,7 @@
 from flask import Flask, render_template, redirect, request, abort, make_response, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_moment import Moment
+from flask_restful import Api
 from data import db_session, call_resource
 from data.users import User
 from data.calls import Call
@@ -8,13 +10,13 @@ from forms.editcallform import EditCallForm
 from forms.edituserform import EditUserForm
 from forms.loginform import LoginForm
 from forms.registerform import RegisterForm
-from flask_restful import Api
 import joblib
 import os
 
 
 app = Flask(__name__)
 api = Api(app)
+moment = Moment(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.config['JSON_AS_ASCII'] = False
 login_manager = LoginManager()
@@ -227,9 +229,9 @@ def main():
     db_session.global_init("db/emergency.db")
     api.add_resource(call_resource.CallListResource, '/api/calls')
     api.add_resource(call_resource.CallResource, '/api/calls/<int:id>')
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
-    #app.run(debug=True)
+    #port = int(os.environ.get("PORT", 5000))
+    #app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(debug=True)
 
 
 if __name__ == '__main__':

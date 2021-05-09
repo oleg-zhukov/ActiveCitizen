@@ -3,6 +3,7 @@ sqlalchemy
 flask_restful
 flask_wtf
 flask_login
+flask_moment
 sqlalchemy_serializer
 requests
 joblib
