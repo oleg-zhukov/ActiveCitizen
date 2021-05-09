@@ -1,10 +1,11 @@
-from flask import Flask, render_template, redirect, request, abort, make_response, jsonify
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask import Flask, render_template, redirect, request, abort, jsonify
+from flask_login import LoginManager, login_user, login_required, logout_user
 from flask_moment import Moment
 from flask_restful import Api
 from data import db_session, call_resource
 from data.users import User
 from data.calls import Call
+from alice import call_process
 from forms.addcallform import AddCallForm
 from forms.editcallform import EditCallForm
 from forms.edituserform import EditUserForm
@@ -224,6 +225,9 @@ def delete_call(call_id):
         abort(404)
     return redirect('/calls')
 
+@app.route('/calls/post', methods=['POST'])
+def alice_add_call():
+    return call_process()
 
 def main():
     db_session.global_init("db/emergency.db")
