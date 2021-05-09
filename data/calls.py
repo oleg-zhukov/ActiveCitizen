@@ -6,11 +6,11 @@ from .db_session import SqlAlchemyBase
 
 
 def predict_service(text):
-    '''
+    """
     функция определяет какую службу вызвать по сообщению о ЧС
     :param text: сообщение о ЧС
     :return: название службы "ambulance", "fire" или "police"
-    '''
+    """
     from main import predictor
     services = ["ambulance", "fire", "police"]
     if text.strip() != "":
@@ -34,19 +34,19 @@ class Call(SqlAlchemyBase, SerializerMixin):
                                     nullable=True)
 
     def recognize_call(self):
-        '''
+        """
         Заполняет поля address, point, service для нового вызова на основе сообщения и адреса
-        '''
+        """
         # определяем какую службу вызвать
         self.service = predict_service(self.message)
         self.change_address(self.address)
         self.change_status("received")
 
     def change_status(self, new_status):
-        '''
+        """
         Изменяет статус вызова received -> serviced -> finished
         :param new_status: новый статус
-        '''
+        """
         if new_status == "received":
             self.call_time = datetime.datetime.now()
         elif new_status == "finished":
@@ -54,10 +54,10 @@ class Call(SqlAlchemyBase, SerializerMixin):
         self.status = new_status
 
     def change_address(self, new_address):
-        '''
+        """
         Изменяет адрес, обновляет координаты вызова
-        :param new_status: новый статус
-        '''
+        :param new_address: новый адрес
+        """
         geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
         geocoder_params = {
             "apikey": "40d1649f-0493-4b70-98ba-98533de7710b",

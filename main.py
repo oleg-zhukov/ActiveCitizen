@@ -10,6 +10,8 @@ from forms.loginform import LoginForm
 from forms.registerform import RegisterForm
 from flask_restful import Api
 import joblib
+import os
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -35,7 +37,7 @@ def not_found(error):
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def reqister():
+def register():
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
@@ -59,6 +61,7 @@ def reqister():
         db_sess.commit()
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
+
 
 @app.route('/users/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -224,7 +227,9 @@ def main():
     db_session.global_init("db/emergency.db")
     api.add_resource(call_resource.CallListResource, '/api/calls')
     api.add_resource(call_resource.CallResource, '/api/calls/<int:id>')
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
+    #app.run(debug=True)
 
 
 if __name__ == '__main__':
