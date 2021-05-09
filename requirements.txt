@@ -6,4 +6,5 @@ flask_login
 sqlalchemy_serializer
 requests
 joblib
+numpy
 scikit-learn == 0.22.2.post1
