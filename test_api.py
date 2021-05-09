@@ -1,4 +1,4 @@
-from requests import get, post, delete
+from requests import get, post
 
 # Корректный запрос
 print(get('http://localhost:5000/api/calls/1').json())
