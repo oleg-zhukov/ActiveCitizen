@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, RadioField
+from wtforms import StringField, TextAreaField, SubmitField, RadioField, DateTimeField, IntegerField
 from wtforms.validators import DataRequired
 from forms.geo_validators import  AddressRequired
 
@@ -10,4 +10,8 @@ class EditCallForm(FlaskForm):
                                                             AddressRequired(unique=True)])
     service = RadioField('Служба', choices=[('fire','Пожарная охрана'),('police','Полиция'), ('ambulance','Скорая помощь')])
     status = RadioField('Статус', choices=[('received','Принят'),('serviced','Выполняется'), ('finished','Завершен')])
+    call_time = DateTimeField('Время вызова')
+    finish_time = DateTimeField('Время завершения')
+    call_id = IntegerField('ID')
+    point = StringField('Point')
     submit = SubmitField('Cохранить изменения')

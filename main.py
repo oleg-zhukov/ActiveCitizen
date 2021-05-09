@@ -39,6 +39,11 @@ def not_found(error):
         return render_template('404.html', title='Страница не найдена'), 404
 
 
+@app.errorhandler(401)
+def unauthorized_access(error):
+        return redirect('/login')
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -179,12 +184,12 @@ def edit_call(call_id):
             form.address.data = call.address
             form.service.data = call.service
             form.status.data = call.status
-            form.call_id = call_id
-            form.call_time = call.call_time
-            form.finish_time = call.finish_time
+            form.call_id.data = call.id
+            form.call_time.data = call.call_time
+            form.finish_time.data = call.finish_time
             if call.point:
                 x, y = call.point.split()
-                form.point = f"{x},{y}"
+                form.point.data = f"{x},{y}"
         else:
             abort(404)
     if form.validate_on_submit():

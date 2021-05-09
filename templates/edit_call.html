@@ -5,10 +5,10 @@
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}
-        <a href="/delete_call/{{ form.call_id }}" class="btn btn-danger"> Удалить вызов </a> &nbsp;&nbsp;
-        Время приема: {{ moment(form.call_time).format("DD.MM.YYYY HH:mm:ss") }} &nbsp;&nbsp;
+        <a href="/delete_call/{{ form.call_id.data }}" class="btn btn-danger"> Удалить вызов </a> &nbsp;&nbsp;
+        Время приема: {{ moment(form.call_time.data).format("DD.MM.YYYY HH:mm:ss") }} &nbsp;&nbsp;
         {% if form.status.data == "finished" %}
-            Время завершения: {{ moment(form.finish_time).format("DD.MM.YYYY HH:mm:ss") }}
+            Время завершения: {{ moment(form.finish_time.data).format("DD.MM.YYYY HH:mm:ss") }}
         {% else %}
             Вызов еще обслуживается
         {% endif %}
@@ -62,7 +62,7 @@
     </p>
     <p>
         {% if form.point %}
-            <img src="https://static-maps.yandex.ru/1.x/?ll={{form.point}}&size=300,300&z=16&l=map&pt={{form.point}},comma">
+            <img src="https://static-maps.yandex.ru/1.x/?ll={{form.point.data}}&size=300,300&z=16&l=map&pt={{form.point.data}},comma">
         {% endif %}
     </p>
     {{message}}
