@@ -6,6 +6,7 @@ flask_login
 flask_moment
 sqlalchemy_serializer
 requests
+psycopg2
 joblib
 numpy
 scikit-learn

@@ -11,6 +11,7 @@ from forms.editcallform import EditCallForm
 from forms.edituserform import EditUserForm
 from forms.loginform import LoginForm
 from forms.registerform import RegisterForm
+import psycopg2
 import joblib
 import os
 
