@@ -5,13 +5,12 @@ from flask_restful import Api
 from data import db_session, call_resource
 from data.users import User
 from data.calls import Call
-from alice import call_process
+from alice2 import call_process
 from forms.addcallform import AddCallForm
 from forms.editcallform import EditCallForm
 from forms.edituserform import EditUserForm
 from forms.loginform import LoginForm
 from forms.registerform import RegisterForm
-import psycopg2
 import joblib
 import os
 
@@ -19,11 +18,12 @@ import os
 app = Flask(__name__)
 api = Api(app)
 moment = Moment(app)
-app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config['SECRET_KEY'] = 'abcdef'
 app.config['JSON_AS_ASCII'] = False
 login_manager = LoginManager()
 login_manager.init_app(app)
-predictor = joblib.load('model/my_log_reg')
+theme_clf = joblib.load('clfs/themes_clf')
+cat_clf = joblib.load('clfs/cat_clf')
 
 
 @login_manager.user_loader
@@ -140,20 +140,14 @@ def index():
     db_sess = db_session.create_session()
     calls = db_sess.query(Call).filter(Call.status != 'finished').all()
     db_sess.commit()
-    police = []
-    fire = []
-    amb = []
+    calls_for_js = []
     for call in calls:
         if call.point:
             coord = [float(x) for x in call.point.split()]
             coord[1], coord[0] = coord[0], coord[1]
-            if call.service == "police":
-                police.append([coord, call.id if current_user.is_authenticated else 0])
-            elif call.service == "fire":
-                fire.append([coord, call.id if current_user.is_authenticated else 0])
-            else:
-                amb.append([coord, call.id if current_user.is_authenticated else 0])
-    return render_template('map.html', police=police, fire=fire, amb=amb)
+            calls_for_js.append([coord, call.id if current_user.is_authenticated else 0])
+
+    return render_template('map.html', calls=calls_for_js)
 
 
 @app.route('/add_call', methods=['GET', 'POST'])
@@ -243,8 +237,8 @@ def main():
     api.add_resource(call_resource.CallListResource, '/api/calls')
     api.add_resource(call_resource.CallResource, '/api/calls/<int:id>')
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
-    #app.run(debug=True)
+    #app.run(host='0.0.0.0', port=port)
+    app.run(port=port, debug=True)
 
 
 if __name__ == '__main__':

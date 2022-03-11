@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1> Редактирование вызова </h1>
+<h1> Редактирование сообщения </h1>
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}
@@ -10,7 +10,7 @@
         {% if form.status.data == "finished" %}
             Время завершения: {{ moment(form.finish_time.data).format("DD.MM.YYYY HH:mm:ss") }}
         {% else %}
-            Вызов еще обслуживается
+            Проблема ещё устраняется
         {% endif %}
     </p>
     <p>
@@ -24,12 +24,8 @@
     </p>
     <p>
         {{ form.service.label }}<br>
-        {% for subfield in form.service %}
-            <tr>
-                <td>{{ subfield }}</td>
-                <td>{{ subfield.label }}</td>
-            </tr>
-        {% endfor %}
+        {{ form.service(class="form-control") }}
+
         {% for error in form.service.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}

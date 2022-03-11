@@ -12,11 +12,11 @@ def predict_service(text):
     :param text: сообщение о ЧС
     :return: название службы "ambulance", "fire" или "police"
     """
-    from main import predictor
-    services = ["ambulance", "fire", "police"]
+    from main import theme_clf
+    from alice2 import translateTheme
     if text.strip() != "":
-        rez = predictor.predict([text])[0]
-        return services[rez]
+        rez = theme_clf.predict([text])[0]
+        return translateTheme(rez)
 
 
 class Call(SqlAlchemyBase, SerializerMixin):

@@ -17,15 +17,15 @@
     <header>
       <nav class="navbar navbar-light bg-light">
           <img src="/static/112.jpeg" height = "70px">
-          <h1>Единая Дежурно-Диспетчерская Служба 112 </h1>
-          <a class="nav-brand" href="/map">Карта вызовов</a>
+          <h1>Активный гражданин Оренбургской области </h1>
+          <a class="nav-brand" href="/map">Карта коммунальных проблем</a>
           {% if current_user.is_authenticated %}
           <div class="nav-item dropdown">
           <a class="nav-brand dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Вызовы </a>
+             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Сообщения </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="/calls">Список вызовов</a>
-                    <a class="dropdown-item" href="/add_call">Новый вызов</a>
+                    <a class="dropdown-item" href="/calls">Список сообщений</a>
+                    <a class="dropdown-item" href="/add_call">Новое сообщение</a>
                 </div>
           </div>
           <a class="navbar-link" href="/users/{{current_user.id}}">{{current_user.name}} {{current_user.surname}}</a>
