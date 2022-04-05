@@ -1,5 +1,5 @@
 import os
-
+import datetime
 import joblib
 from flask import Flask, render_template, redirect, request, abort, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -24,8 +24,8 @@ app.config['SECRET_KEY'] = 'abcdef'
 app.config['JSON_AS_ASCII'] = False
 login_manager = LoginManager()
 login_manager.init_app(app)
-theme_clf = joblib.load('clfs/themes_clf')
-cat_clf = joblib.load('clfs/cat_clf')
+#theme_clf = joblib.load('clfs/themes_clf')
+#cat_clf = joblib.load('clfs/cat_clf')
 
 
 @login_manager.user_loader
@@ -182,6 +182,7 @@ def edit_call(call_id):
             form.address.data = call.address
             form.service.data = call.service
             form.status.data = call.status
+            form.answer.data = call.answer
             form.call_id.data = call.id
             form.call_time.data = call.call_time
             form.finish_time.data = call.finish_time
@@ -196,6 +197,7 @@ def edit_call(call_id):
         if call:
             call.message = form.message.data
             call.service = form.service.data
+            call.answer = form.answer.data
             call.change_address(form.address.data)
             call.change_status(form.status.data)
             db_sess.commit()
@@ -212,9 +214,9 @@ def edit_call(call_id):
 @login_required
 def calls():
     db_sess = db_session.create_session()
-    calls = db_sess.query(Call).all()
+    calls = db_sess.query(Call).order_by(Call.call_time).all()
     db_sess.commit()
-    return render_template('calls.html', calls=calls)
+    return render_template('calls.html', calls=calls, time_now=datetime.datetime.today())
 
 
 @app.route('/delete_call/<int:call_id>', methods=['GET', 'POST'])
@@ -236,12 +238,12 @@ def alice_add_call():
 
 
 def main():
-    db_session.global_init("db/emergency.db")
+    db_session.global_init("emergency.db")
     api.add_resource(call_resource.CallListResource, '/api/calls')
     api.add_resource(call_resource.CallResource, '/api/calls/<int:id>')
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
-    #app.run(port=port, debug=True)
+    #app.run(host='0.0.0.0', port=port)
+    app.run(port=port, debug=True)
 
 
 if __name__ == '__main__':

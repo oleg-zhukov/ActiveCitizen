@@ -10,7 +10,7 @@ ymaps.ready(init);
 function init()
 {
     myMap = new ymaps.Map("map", {
-        center: [55.76, 37.64],
+        center: [51.46, 55.05],
         zoom: 10
     });
     for (var p in calls)
@@ -23,7 +23,7 @@ function init()
             // Необходимо указать данный тип макета.
             iconLayout: 'default#image',
             // Своё изображение иконки метки.
-            iconImageHref: '/static/icons/${filenames[calls[p][1]][0]}.png',
+            iconImageHref: `/static/icons/${filenames[calls[p][1]][0]}.png`,
             // Размеры метки.
             iconImageSize: [40, 40],
             // Смещение левого верхнего угла иконки относительно
@@ -37,7 +37,9 @@ function init()
 
     myMap.controls.remove('fullscreenControl');
     myMap.controls.remove('trafficControl');
-    myMap.setBounds(myMap.geoObjects.getBounds());
+    if (calls.length > 1) {
+        myMap.setBounds(myMap.geoObjects.getBounds());
+    }
 }
 
 

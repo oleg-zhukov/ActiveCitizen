@@ -31,21 +31,27 @@
             <td class="title" width="8%" bgcolor="#dddddd" align="center">Действия</td>
         </tr>
         {% for call in calls %}
-            {% set color = "#d0daed"  %}
+            {% if (time_now - call.call_time).days >= 2 and call.status != "finished" %}
+                {%  set color = "#dc143c" %}
+                {% set text_color = "#FFF0F5" %}
+            {% else %}
+                {% set color = "#d0daed"  %}
+                {% set text_color = "ffffff" %}
+            {% endif %}
         <tr class="my_row">
-            <td class="ordinary" bgcolor ={{color}} align="center">{{ call.id }}</td>
-            <td class="ordinary" bgcolor ={{color}}>{{ moment(call.call_time).format("DD.MM.YYYY HH:mm:ss") }}</td>
-            <td class="ordinary" bgcolor ={{color}}>{{ call.message }}</td>
-            <td class="ordinary" bgcolor ={{color}}>
+            <td class="ordinary" bgcolor ={{color}} align="center" style="color:{{text_color}}">{{ call.id }}</td>
+            <td class="ordinary" bgcolor ={{color}} style="color:{{text_color}}">{{ moment(call.call_time).format("DD.MM.YYYY HH:mm:ss") }}</td>
+            <td class="ordinary" bgcolor ={{color}} style="color:{{text_color}}">{{ call.message }}</td>
+            <td class="ordinary" bgcolor ={{color}} style="color:{{text_color}}">
                 <span class="ymaps-geolink">
                         {{ call.address }}
                 </span>
             </td>
-            <td class="ordinary" bgcolor ={{color}}>
+            <td class="ordinary" bgcolor ={{color}} style="color:{{text_color}}">
                 {{ call.service }}
             </td>
-            <td class="ordinary" bgcolor ={{color}} align="center">{{ STATUSES[call.status] }}</td>
-            <td class="ordinary" bgcolor ={{color}} align="center">
+            <td class="ordinary" bgcolor ={{color}} align="center" style="color:{{text_color}}">{{ STATUSES[call.status] }}</td>
+            <td class="ordinary" bgcolor ={{color}} align="center" style="color:{{text_color}}">
                 {% if current_user.is_authenticated %}
                 <div>       <a href="/calls/{{ call.id }}" class="btn btn-warning">.....</a>
                 </div>

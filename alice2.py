@@ -66,8 +66,8 @@ def to_zeros(arr, cat):
             arr[0][i] = 0
 
 
-cat_model = joblib.load('./clfs/cat_clf')  # load classificator of categories
-themes_model = joblib.load('./clfs/themes_clf')  # load classificator of themes
+#cat_model = joblib.load('./clfs/cat_clf')  # load classificator of categories
+#themes_model = joblib.load('./clfs/themes_clf')  # load classificator of themes
 
 sessionStorage = {}
 

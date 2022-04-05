@@ -1,9 +1,11 @@
 import datetime
 import sqlalchemy
 import requests
+import random
 from sqlalchemy import null
 from sqlalchemy_serializer import SerializerMixin
 from .db_session import SqlAlchemyBase
+from tables import *
 
 
 def predict_service(text):
@@ -12,10 +14,11 @@ def predict_service(text):
     :param text: сообщение о ЧС
     :return: название службы "ambulance", "fire" или "police"
     """
-    from main import theme_clf
+    #from main import theme_clf
     from alice2 import translateTheme
     if text.strip() != "":
-        rez = theme_clf.predict([text])[0]
+        #rez = theme_clf.predict([text])[0]
+        rez = random.choice(themes)
         return translateTheme(rez)
 
 
@@ -33,6 +36,7 @@ class Call(SqlAlchemyBase, SerializerMixin):
                                   default=datetime.datetime.utcnow())
     finish_time = sqlalchemy.Column(sqlalchemy.DateTime,
                                     nullable=True)
+    answer = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     def recognize_call(self):
         """

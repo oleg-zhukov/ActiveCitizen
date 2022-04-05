@@ -47,6 +47,16 @@
         {% endfor %}
     </p>
     <p>
+        {{ form.answer.label }}<br>
+        {{ form.answer(class="form-control") }}
+
+        {% for error in form.service.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
         {{ form.address.label }}<br>
         {{ form.address(class="form-control") }}
         <br>
