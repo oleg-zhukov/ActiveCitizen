@@ -5,6 +5,7 @@ from flask import Flask, render_template, redirect, request, abort, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_moment import Moment
 from flask_restful import Api
+from sqlalchemy import desc
 
 from alice2 import call_process
 from data import db_session, call_resource
@@ -24,8 +25,8 @@ app.config['SECRET_KEY'] = 'abcdef'
 app.config['JSON_AS_ASCII'] = False
 login_manager = LoginManager()
 login_manager.init_app(app)
-#theme_clf = joblib.load('clfs/themes_clf')
-#cat_clf = joblib.load('clfs/cat_clf')
+theme_clf = joblib.load('themes_clf')
+cat_clf = joblib.load('cat_clf')
 
 
 @login_manager.user_loader
@@ -214,7 +215,7 @@ def edit_call(call_id):
 @login_required
 def calls():
     db_sess = db_session.create_session()
-    calls = db_sess.query(Call).order_by(Call.call_time).all()
+    calls = db_sess.query(Call).order_by(desc(Call.call_time)).all()
     db_sess.commit()
     return render_template('calls.html', calls=calls, time_now=datetime.datetime.today())
 

@@ -14,11 +14,11 @@ def predict_service(text):
     :param text: сообщение о ЧС
     :return: название службы "ambulance", "fire" или "police"
     """
-    #from main import theme_clf
+    from main import theme_clf
     from alice2 import translateTheme
     if text.strip() != "":
-        #rez = theme_clf.predict([text])[0]
-        rez = random.choice(themes)
+        rez = theme_clf.predict([text])[0]
+        #rez = random.choice(themes)
         return translateTheme(rez)
 
 
