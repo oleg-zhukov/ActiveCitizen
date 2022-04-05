@@ -1,19 +1,21 @@
+import os
+
+import joblib
 from flask import Flask, render_template, redirect, request, abort, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_moment import Moment
 from flask_restful import Api
-from data import db_session, call_resource
-from data.users import User
-from data.calls import Call
+
 from alice2 import call_process
+from data import db_session, call_resource
+from data.calls import Call
+from data.users import User
 from forms.addcallform import AddCallForm
 from forms.editcallform import EditCallForm
 from forms.edituserform import EditUserForm
 from forms.loginform import LoginForm
 from forms.registerform import RegisterForm
-import joblib
-import os
-
+from tables import *
 
 app = Flask(__name__)
 api = Api(app)
@@ -145,7 +147,8 @@ def index():
         if call.point:
             coord = [float(x) for x in call.point.split()]
             coord[1], coord[0] = coord[0], coord[1]
-            calls_for_js.append([coord, call.id if current_user.is_authenticated else 0])
+            theme_number = [k for k, v in translateT.items() if v == call.service][0]
+            calls_for_js.append([coord, themeToCat[theme_number], call.id if current_user.is_authenticated else 0])
 
     return render_template('map.html', calls=calls_for_js)
 
