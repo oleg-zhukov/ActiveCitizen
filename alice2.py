@@ -277,7 +277,7 @@ def dialog(req, res):
             sessionStorage[user_id]['address'] = req['request']['original_utterance']
             # создать вызов
             call = Call()
-            call.message = sessionStorage[user_id]['firstmsg']
+            call.message = sessionStorage[user_id]['firstmsg'][0]
             #call.address = sessionStorage[user_id]['address']
             call.service = translateTheme(sessionStorage[user_id]["theme"])
             call.change_status("received")
