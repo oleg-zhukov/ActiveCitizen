@@ -4,6 +4,7 @@ import joblib  # to load models
 import numpy as np  # operations with arrays
 import json  # work with json requests and responses
 from tables import *
+from flask import request
 
 import csv
 
@@ -72,7 +73,7 @@ themes_model = joblib.load('themes_clf')  # load classificator of themes
 sessionStorage = {}
 
 
-def call_process(request):
+def call_process():
     # Начинаем формировать ответ, согласно документации
     # мы собираем словарь, который потом при помощи
     # библиотеки json преобразуем в JSON и отдадим Алисе
