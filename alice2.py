@@ -5,17 +5,25 @@ import numpy as np  # operations with arrays
 import json  # work with json requests and responses
 from tables import *
 from flask import request
-
+from data import db_session
+from data.calls import Call
 import csv
 
 # words of agreement
 accept = ['да', 'конечно', 'точно', 'верно', 'согласен', 'естественно', 'правильно', 'ага', 'именно', 'правда']
-accept
+
 
 # words of disagreemnt
 decline = ['не', 'нет', 'неверно', 'не верно', 'неправильно', 'не правильно', 'не точно', 'неточно', 'несогласен',
            'не согласен', 'неа', 'не правда', 'неправда', 'несогласен', 'не согласен']
-decline
+
+def check_address(req):
+    for entity in req['request']['nlu']['entities']:
+        if entity['type'] == 'YANDEX.GEO':
+            if 'city' in entity['value'] and 'street' in entity['value'] and 'house_number' in entity['value']:
+                return True
+    return False
+
 
 def getCatOfTheme(theme):
     ''' returns id of categorie of theme '''
@@ -207,7 +215,7 @@ def askTheme(req, res, user_id):
         res['response']['end_session'] = True
     else:
         if not sessionStorage[user_id]['themes'].any():
-            res['response']['text'] = 'К сожалению не удалось распознать ntve сообщения'
+            res['response']['text'] = 'К сожалению не удалось распознать тему сообщения'
             res['response']['end_session'] = True
             return
         sessionStorage[user_id]['themes'][0][sessionStorage[user_id]['theme_max']] = 0
@@ -259,6 +267,28 @@ def dialog(req, res):
         askTheme(req, res, user_id)
         return
 
+    else:
+        if check_address(req):
+            sessionStorage[user_id]['address'] = req['request']['original_utterance']
+            # создать вызов
+            call = Call()
+            call.message = sessionStorage[user_id]['message']
+            call.address = sessionStorage[user_id]['address']
+            try:
+                call.recognize_call()
+            except:
+                res['response']['text'] = f'Пожалуйста, уточните адрес. Возможно вы ошиблись или не указали полное ' \
+                                          f'название населенного пункта '
+            else:
+                db_sess = db_session.create_session()
+                db_sess.add(call)
+                db_sess.commit()
+                res['response']['text'] = f'Вызов принят.'
+                res['response']['end_session'] = True
+        else:
+            res['response']['text'] = f'Пожалуйста, уточните адрес. Возможно вы ошиблись или не указали полное ' \
+                                      f'название населенного пункта '
+
 
     '''else:
         f_name = '/content/drive/MyDrive/Data/dataset.csv'
@@ -271,22 +301,3 @@ def dialog(req, res):
              message])'''
 
 
-'''else:
-        if check_address(req):
-            sessionStorage[user_id]['address'] = req['request']['original_utterance']
-            # создать вызов
-            call = Call()
-            call.message = sessionStorage[user_id]['message']
-            call.address = sessionStorage[user_id]['address']
-            try:
-                call.recognize_call()
-            except:
-                res['response']['text'] = f'Пожалуйста, уточните адрес. Возможно вы ошиблись или не указали полное название населенного пункта'
-            else:
-                db_sess = db_session.create_session()
-                db_sess.add(call)
-                db_sess.commit()
-                res['response']['text'] = f'Вызов принят. К Вам отправилась {SERVICES[call.service]} по адресу: {call.address}'
-                res['response']['end_session'] = True
-        else:
-            res['response']['text'] = f'Пожалуйста, уточните адрес. Возможно вы ошиблись или не указали полное название населенного пункта'''
