@@ -252,7 +252,7 @@ def dialog(req, res):
         res['response']['text'] = 'Здравствуйте! Пожалуйста, расскажите, что произошло'
         return
     sessionStorage[user_id]['message'] = [req['request']['original_utterance']]
-    if not sessionStorage[user_id]["cats"] == 0:
+    if not sessionStorage[user_id]["cats"] == 0 and not sessionStorage[user_id]["noask"]:
         sessionStorage[user_id]["firstmsg"] = sessionStorage[user_id]["message"]
     if not sessionStorage[user_id]["askadress"]:
         if not sessionStorage[user_id]["noask"]:
