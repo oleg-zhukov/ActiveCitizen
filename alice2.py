@@ -245,7 +245,8 @@ def dialog(req, res):
             'asktheme': False,
             'new': True,
             'askadress': False,
-            'firstmsg': ''
+            'firstmsg': '',
+            'savemsg': True
         }
         # Заполняем текст ответа
         print("New user")
@@ -253,8 +254,9 @@ def dialog(req, res):
         return
     sessionStorage[user_id]['message'] = [req['request']['original_utterance']]
     if not sessionStorage[user_id]["askadress"]:
-        if not sessionStorage[user_id]["cats"] == 0 and not sessionStorage[user_id]["noask"]:
+        if not sessionStorage[user_id]["cats"] == 0 and sessionStorage[user_id]["savemsg"]:
             sessionStorage[user_id]["firstmsg"] = sessionStorage[user_id]["message"]
+            sessionStorage[user_id]["savemsg"] = False
         if not sessionStorage[user_id]["noask"]:
             ask1(req, res, user_id)
 
