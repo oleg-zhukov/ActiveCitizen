@@ -252,21 +252,21 @@ def dialog(req, res):
         return
 
     sessionStorage[user_id]['message'] = [req['request']['original_utterance']]
+    if not sessionStorage[user_id]["askadress"]:
+        if not sessionStorage[user_id]["noask"]:
+            ask1(req, res, user_id)
 
-    if not sessionStorage[user_id]["noask"]:
-        ask1(req, res, user_id)
+        elif sessionStorage[user_id]['reask']:
+            reask(req, res, user_id)
+            return
 
-    elif sessionStorage[user_id]['reask']:
-        reask(req, res, user_id)
-        return
+        elif sessionStorage[user_id]['askcat']:
+            askcat(req, res, user_id)
+            return
 
-    elif sessionStorage[user_id]['askcat']:
-        askcat(req, res, user_id)
-        return
-
-    elif sessionStorage[user_id]['asktheme']:
-        askTheme(req, res, user_id)
-        return
+        elif sessionStorage[user_id]['asktheme']:
+            askTheme(req, res, user_id)
+            return
 
     elif sessionStorage[user_id]['askadress']:
         if check_address(req):
