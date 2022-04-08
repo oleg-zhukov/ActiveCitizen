@@ -114,7 +114,7 @@ def ask1(req, res, user_id):
             sessionStorage[user_id]['categorie'] = getCatOfTheme(sessionStorage[user_id]['theme'])
             res['response'][
                 'text'] = f'Принято:\nТема: {translateTheme(sessionStorage[user_id]["theme"])}\n Категория: {translateC[sessionStorage[user_id]["categorie"]]}'
-            res['response']['end_session'] = True
+            sessionStorage[user_id]['askadress'] = True
         elif ask(sessionStorage[user_id]['message']) == -1:
             sessionStorage[user_id]['themes'][0][sessionStorage[user_id]['theme_max']] = 0
             sessionStorage[user_id]['theme_max'] = np.argmax(sessionStorage[user_id]['themes'], axis=1)[0]
@@ -129,7 +129,7 @@ def ask1(req, res, user_id):
             sessionStorage[user_id]['categorie'] = getCatOfTheme(sessionStorage[user_id]['theme'])
             res['response'][
                 'text'] = f'Принято:\nТема: {translateTheme(sessionStorage[user_id]["theme"])}\n Категория: {translateC[sessionStorage[user_id]["categorie"]]}'
-            res['response']['end_session'] = True
+            sessionStorage[user_id]['askadress'] = True
         else:
             print("Reask message")
             sessionStorage[user_id]['themes'][0][sessionStorage[user_id]['theme_max']] = 0
@@ -152,7 +152,7 @@ def reask(req, res, user_id):
             sessionStorage[user_id]['categorie'] = getCatOfTheme(sessionStorage[user_id]['theme'])
             res['response'][
                 'text'] = f'Принято:\nТема: {translateTheme(sessionStorage[user_id]["theme"])}\n Категория: {translateC[sessionStorage[user_id]["categorie"]]}'
-            res['response']['end_session'] = True
+            sessionStorage[user_id]['askadress'] = True
         elif ask(sessionStorage[user_id]['message']) == -1:
             sessionStorage[user_id]['themes'][0][sessionStorage[user_id]['theme_max']] = 0
             sessionStorage[user_id]['theme_max'] = np.argmax(sessionStorage[user_id]['themes'], axis=1)[0]
@@ -168,7 +168,7 @@ def reask(req, res, user_id):
             sessionStorage[user_id]['categorie'] = getCatOfTheme(sessionStorage[user_id]['theme'])
             res['response'][
                 'text'] = f'Принято:\nТема: {translateTheme(sessionStorage[user_id]["theme"])}\n Категория: {translateC[sessionStorage[user_id]["categorie"]]}'
-            res['response']['end_session'] = True
+            sessionStorage[user_id]['askadress'] = True
         elif ask(sessionStorage[user_id]['message']) == -1:
             sessionStorage[user_id]['themes'][0][sessionStorage[user_id]['theme_max']] = 0
             sessionStorage[user_id]['cat_max'] = np.argmax(sessionStorage[user_id]['categories'], axis=1)[0]
@@ -192,7 +192,7 @@ def askcat(req, res, user_id):
     else:
         if not sessionStorage[user_id]['categories'].any():
             res['response']['text'] = 'К сожалению не удалось распознать категорию сообщения'
-            res['response']['end_session'] = True
+            sessionStorage[user_id]['askadress'] = True
             return
         sessionStorage[user_id]['categories'][0][sessionStorage[user_id]['cat_max']] = 0
         sessionStorage[user_id]['cat_max'] = np.argmax(sessionStorage[user_id]['categories'], axis=1)[0]
@@ -216,7 +216,7 @@ def askTheme(req, res, user_id):
     else:
         if not sessionStorage[user_id]['themes'].any():
             res['response']['text'] = 'К сожалению не удалось распознать тему сообщения'
-            res['response']['end_session'] = True
+            sessionStorage[user_id]['askadress'] = True
             return
         sessionStorage[user_id]['themes'][0][sessionStorage[user_id]['theme_max']] = 0
         sessionStorage[user_id]['theme_max'] = np.argmax(sessionStorage[user_id]['themes'], axis=1)[0]
@@ -244,6 +244,7 @@ def dialog(req, res):
             'askcat': False,
             'asktheme': False,
             'new': True,
+            'askadress': False
         }
         # Заполняем текст ответа
         print("New user")
@@ -267,7 +268,7 @@ def dialog(req, res):
         askTheme(req, res, user_id)
         return
 
-    else:
+    elif sessionStorage[user_id]['askadress']:
         if check_address(req):
             sessionStorage[user_id]['address'] = req['request']['original_utterance']
             # создать вызов
@@ -283,11 +284,12 @@ def dialog(req, res):
                 db_sess = db_session.create_session()
                 db_sess.add(call)
                 db_sess.commit()
-                res['response']['text'] = f'Вызов принят.'
+                res['response']['text'] = f'Вызов принят. Адрес: {sessionStorage[user_id]["address"]}'
                 res['response']['end_session'] = True
         else:
             res['response']['text'] = f'Пожалуйста, уточните адрес. Возможно вы ошиблись или не указали полное ' \
                                       f'название населенного пункта '
+        return
 
 
     '''else:
