@@ -275,7 +275,7 @@ def dialog(req, res):
             call = Call()
             call.message = sessionStorage[user_id]['message']
             #call.address = sessionStorage[user_id]['address']
-            call.service = sessionStorage[user_id]["theme"]
+            call.service = translateTheme(sessionStorage[user_id]["theme"])
             call.change_status("received")
             try:
                 call.change_address(sessionStorage[user_id]["address"])
