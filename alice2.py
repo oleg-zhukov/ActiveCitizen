@@ -244,14 +244,16 @@ def dialog(req, res):
             'askcat': False,
             'asktheme': False,
             'new': True,
-            'askadress': False
+            'askadress': False,
+            'firstmsg': ''
         }
         # Заполняем текст ответа
         print("New user")
         res['response']['text'] = 'Здравствуйте! Пожалуйста, расскажите, что произошло'
         return
-
     sessionStorage[user_id]['message'] = [req['request']['original_utterance']]
+    if not sessionStorage[user_id]["cats"] == 0:
+        sessionStorage[user_id]["firstmsg"] = sessionStorage[user_id]["message"]
     if not sessionStorage[user_id]["askadress"]:
         if not sessionStorage[user_id]["noask"]:
             ask1(req, res, user_id)
@@ -273,7 +275,7 @@ def dialog(req, res):
             sessionStorage[user_id]['address'] = req['request']['original_utterance']
             # создать вызов
             call = Call()
-            call.message = sessionStorage[user_id]['message']
+            call.message = sessionStorage[user_id]['firstmsg']
             #call.address = sessionStorage[user_id]['address']
             call.service = translateTheme(sessionStorage[user_id]["theme"])
             call.change_status("received")
