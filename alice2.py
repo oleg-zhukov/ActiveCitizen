@@ -275,17 +275,17 @@ def dialog(req, res):
             call = Call()
             call.message = sessionStorage[user_id]['message']
             call.address = sessionStorage[user_id]['address']
-            try:
+            '''try:
                 call.recognize_call()
             except:
                 res['response']['text'] = f'Пожалуйста, уточните адрес. Возможно вы ошиблись или не указали полное ' \
                                           f'название населенного пункта '
-            else:
-                db_sess = db_session.create_session()
-                db_sess.add(call)
-                db_sess.commit()
-                res['response']['text'] = f'Вызов принят. Адрес: {sessionStorage[user_id]["address"]}'
-                res['response']['end_session'] = True
+            else:'''
+            db_sess = db_session.create_session()
+            db_sess.add(call)
+            db_sess.commit()
+            res['response']['text'] = f'Вызов принят. Адрес: {sessionStorage[user_id]["address"]}'
+            res['response']['end_session'] = True
         else:
             res['response']['text'] = f'Пожалуйста, уточните адрес. Возможно вы ошиблись или не указали полное ' \
                                       f'название населенного пункта '
