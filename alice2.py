@@ -185,8 +185,8 @@ def askcat(req, res, user_id):
     if ask(sessionStorage[user_id]['message']) == 1:
         sessionStorage[user_id]["categorie"] = sessionStorage[user_id]["cat_max"]
         to_zeros(sessionStorage[user_id]["themes"], sessionStorage[user_id]["categorie"])
+        sessionStorage[user_id]["theme_max"] = np.argmax(sessionStorage[user_id]['themes'], axis=1)[0]
         res['response']['text'] = f'Принято\nВы подразумевали тему "{translateTheme(sessionStorage[user_id]["theme_max"])}"?'
-        sessionStorage[user_id]["categorie"] = sessionStorage[user_id]["cat_max"]
         sessionStorage[user_id]['askcat'] = False
         sessionStorage[user_id]['asktheme'] = True
         print(sessionStorage[user_id]["themes"])
