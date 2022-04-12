@@ -31,7 +31,7 @@
             <td class="title" width="8%" bgcolor="#dddddd" align="center">Действия</td>
         </tr>
         {% for call in calls %}
-            {% if (time_now - call.call_time).days >= 2 and call.status != "finished" %}
+            {% if (time_now - call.call_time).days >= 10 and call.status != "finished" %}
                 {%  set color = "#dc143c" %}
                 {% set text_color = "#FFF0F5" %}
             {% else %}
