@@ -106,7 +106,7 @@ def ask1(req, res, user_id):
         sessionStorage[user_id]['themes'] = themes_model.predict_proba(sessionStorage[user_id]['message'])
         sessionStorage[user_id]['categories'] = cat_model.predict_proba(sessionStorage[user_id]['message'])
         sessionStorage[user_id]['theme_max'] = np.argmax(sessionStorage[user_id]['themes'], axis=1)[0]
-        res['response']['text'] = f'Вы подразумевали {translateTheme(sessionStorage[user_id]["theme_max"])}?'
+        res['response']['text'] = f'Вы подразумевали тему "{translateTheme(sessionStorage[user_id]["theme_max"])}"?'
 
     elif sessionStorage[user_id]['cats']-1 == 1:
         if ask(sessionStorage[user_id]['message']) == 1:
@@ -119,7 +119,7 @@ def ask1(req, res, user_id):
             sessionStorage[user_id]['themes'][0][sessionStorage[user_id]['theme_max']] = 0
             sessionStorage[user_id]['theme_max'] = np.argmax(sessionStorage[user_id]['themes'], axis=1)[0]
             res['response'][
-                'text'] = f'Вы подразумевали {translateTheme(sessionStorage[user_id]["theme_max"])}?'
+                'text'] = f'Вы подразумевали тему "{translateTheme(sessionStorage[user_id]["theme_max"])}"?'
             sessionStorage[user_id]['askcat'] = True
 
     else:
@@ -143,7 +143,7 @@ def reask(req, res, user_id):
     sessionStorage[user_id]["reask_msg"] = False
     if sessionStorage[user_id]['cats'] == 0:
         sessionStorage[user_id]['theme_max'] = np.argmax(sessionStorage[user_id]['themes'], axis=1)[0]
-        res['response']['text'] = f'Вы подразумевали {translateTheme(sessionStorage[user_id]["theme_max"])}?'
+        res['response']['text'] = f'Вы подразумевали тему "{translateTheme(sessionStorage[user_id]["theme_max"])}"?'
         sessionStorage[user_id]['cats'] += 1
 
     elif sessionStorage[user_id]['cats'] == 1:
@@ -157,7 +157,7 @@ def reask(req, res, user_id):
             sessionStorage[user_id]['themes'][0][sessionStorage[user_id]['theme_max']] = 0
             sessionStorage[user_id]['theme_max'] = np.argmax(sessionStorage[user_id]['themes'], axis=1)[0]
             res['response'][
-                'text'] = f'Вы подразумевали категорию {translateTheme(sessionStorage[user_id]["theme_max"])}?'
+                'text'] = f'Вы подразумевали категорию "{translateTheme(sessionStorage[user_id]["theme_max"])}"?'
             sessionStorage[user_id]['cats'] += 1
             sessionStorage[user_id]['askcat'] = True
             sessionStorage[user_id]['reask'] = False
@@ -173,7 +173,7 @@ def reask(req, res, user_id):
             sessionStorage[user_id]['themes'][0][sessionStorage[user_id]['theme_max']] = 0
             sessionStorage[user_id]['cat_max'] = np.argmax(sessionStorage[user_id]['categories'], axis=1)[0]
             res['response'][
-                'text'] = f'В таком случае, Вы подразумевали категорию {translateCategorie(sessionStorage[user_id]["cat_max"])}?'
+                'text'] = f'В таком случае, Вы подразумевали категорию "{translateCategorie(sessionStorage[user_id]["cat_max"])}"?'
             sessionStorage[user_id]['cats'] += 1000
             sessionStorage[user_id]['askcat'] = True
             sessionStorage[user_id]['reask'] = False
@@ -183,7 +183,7 @@ def askcat(req, res, user_id):
     print("Asking cat...")
     print(sessionStorage[user_id]["categories"][0])
     if ask(sessionStorage[user_id]['message']) == 1:
-        res['response']['text'] = f'Принято\nВы подразумевали категорию {translateTheme(sessionStorage[user_id]["theme_max"])}?'
+        res['response']['text'] = f'Принято\nВы подразумевали категорию "{translateTheme(sessionStorage[user_id]["theme_max"])}"?'
         sessionStorage[user_id]["categorie"] = sessionStorage[user_id]["cat_max"]
         sessionStorage[user_id]['askcat'] = False
         sessionStorage[user_id]['asktheme'] = True
@@ -198,7 +198,7 @@ def askcat(req, res, user_id):
         sessionStorage[user_id]['cat_max'] = np.argmax(sessionStorage[user_id]['categories'], axis=1)[0]
         print(sessionStorage[user_id])
         res['response'][
-            'text'] = f'В таком случае, Вы подразумевали категорию {translateCategorie(sessionStorage[user_id]["cat_max"])}?'
+            'text'] = f'В таком случае, Вы подразумевали категорию "{translateCategorie(sessionStorage[user_id]["cat_max"])}"?'
 
 
 def askTheme(req, res, user_id):
@@ -221,7 +221,7 @@ def askTheme(req, res, user_id):
         sessionStorage[user_id]['themes'][0][sessionStorage[user_id]['theme_max']] = 0
         sessionStorage[user_id]['theme_max'] = np.argmax(sessionStorage[user_id]['themes'], axis=1)[0]
         res['response'][
-            'text'] = f'В таком случае, Вы подразумевали {translateTheme(sessionStorage[user_id]["theme_max"])}?'
+            'text'] = f'В таком случае, Вы подразумевали тему "{translateTheme(sessionStorage[user_id]["theme_max"])}"?'
 
 
 def dialog(req, res):
@@ -250,7 +250,7 @@ def dialog(req, res):
         }
         # Заполняем текст ответа
         print("New user")
-        res['response']['text'] = 'Здравствуйте! Пожалуйста, расскажите, что произошло'
+        res['response']['text'] = 'Здравствуйте! Пожалуйста, расскажите о проблеме, с которой Вы столкнулись'
         return
     sessionStorage[user_id]['message'] = [req['request']['original_utterance']]
     if not sessionStorage[user_id]["askadress"]:

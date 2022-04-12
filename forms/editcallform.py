@@ -6,7 +6,7 @@ from tables import translateT
 
 class EditCallForm(FlaskForm):
     message = TextAreaField('Сообщение', validators=[DataRequired(message="Поле 'сообщение' не может быть пустым")])
-    address = StringField('Адрес происшествия', validators=[DataRequired(message="Поле 'адрес' не может быть пустым"),
+    address = StringField('Адрес', validators=[DataRequired(message="Поле 'адрес' не может быть пустым"),
                                                             AddressRequired(unique=True)])
     service = SelectField(u'Тема',
                           choices=
