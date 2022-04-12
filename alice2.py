@@ -183,6 +183,7 @@ def askcat(req, res, user_id):
     print("Asking cat...")
     print(sessionStorage[user_id]["categories"][0])
     if ask(sessionStorage[user_id]['message']) == 1:
+        sessionStorage[user_id]["categorie"] = sessionStorage[user_id]["cat_max"]
         to_zeros(sessionStorage[user_id]["themes"], sessionStorage[user_id]["categorie"])
         res['response']['text'] = f'Принято\nВы подразумевали тему "{translateTheme(sessionStorage[user_id]["theme_max"])}"?'
         sessionStorage[user_id]["categorie"] = sessionStorage[user_id]["cat_max"]
