@@ -113,7 +113,7 @@ def ask1(req, res, user_id):
             sessionStorage[user_id]['theme'] = sessionStorage[user_id]['theme_max']
             sessionStorage[user_id]['categorie'] = getCatOfTheme(sessionStorage[user_id]['theme'])
             res['response'][
-                'text'] = f'Принято:\nТема: {translateTheme(sessionStorage[user_id]["theme"])}\n Категория: {translateC[sessionStorage[user_id]["categorie"]]}'
+                'text'] = 'Принято. Пожалуйста, уточните адрес.'
             sessionStorage[user_id]['askadress'] = True
         elif ask(sessionStorage[user_id]['message']) == -1:
             sessionStorage[user_id]['themes'][0][sessionStorage[user_id]['theme_max']] = 0
@@ -128,7 +128,7 @@ def ask1(req, res, user_id):
             sessionStorage[user_id]['theme'] = sessionStorage[user_id]['theme_max']
             sessionStorage[user_id]['categorie'] = getCatOfTheme(sessionStorage[user_id]['theme'])
             res['response'][
-                'text'] = f'Принято:\nТема: {translateTheme(sessionStorage[user_id]["theme"])}\n Категория: {translateC[sessionStorage[user_id]["categorie"]]}'
+                'text'] = f'Принято. Пожалуйста, уточните адрес.'
             sessionStorage[user_id]['askadress'] = True
         else:
             print("Reask message")
@@ -151,7 +151,7 @@ def reask(req, res, user_id):
             sessionStorage[user_id]['theme'] = sessionStorage[user_id]['theme_max']
             sessionStorage[user_id]['categorie'] = getCatOfTheme(sessionStorage[user_id]['theme'])
             res['response'][
-                'text'] = f'Принято:\nТема: {translateTheme(sessionStorage[user_id]["theme"])}\n Категория: {translateC[sessionStorage[user_id]["categorie"]]}'
+                'text'] = f'Принято. Пожалуйста, уточните адрес.'
             sessionStorage[user_id]['askadress'] = True
         elif ask(sessionStorage[user_id]['message']) == -1:
             sessionStorage[user_id]['themes'][0][sessionStorage[user_id]['theme_max']] = 0
@@ -167,7 +167,7 @@ def reask(req, res, user_id):
             sessionStorage[user_id]['theme'] = sessionStorage[user_id]['theme_max']
             sessionStorage[user_id]['categorie'] = getCatOfTheme(sessionStorage[user_id]['theme'])
             res['response'][
-                'text'] = f'Принято:\nТема: {translateTheme(sessionStorage[user_id]["theme"])}\n Категория: {translateC[sessionStorage[user_id]["categorie"]]}'
+                'text'] = f'Принято. Пожалуйста, уточните адрес.'
             sessionStorage[user_id]['askadress'] = True
         elif ask(sessionStorage[user_id]['message']) == -1:
             sessionStorage[user_id]['themes'][0][sessionStorage[user_id]['theme_max']] = 0
@@ -183,7 +183,7 @@ def askcat(req, res, user_id):
     print("Asking cat...")
     print(sessionStorage[user_id]["categories"][0])
     if ask(sessionStorage[user_id]['message']) == 1:
-        res['response']['text'] = f'Принято\nВы подразумевали {translateTheme(sessionStorage[user_id]["theme_max"])}'
+        res['response']['text'] = f'Принято\nВы подразумевали категорию {translateTheme(sessionStorage[user_id]["theme_max"])}?'
         sessionStorage[user_id]["categorie"] = sessionStorage[user_id]["cat_max"]
         sessionStorage[user_id]['askcat'] = False
         sessionStorage[user_id]['asktheme'] = True
@@ -211,7 +211,7 @@ def askTheme(req, res, user_id):
         sessionStorage[user_id]['theme'] = sessionStorage[user_id]['theme_max']
         sessionStorage[user_id]['categorie'] = getCatOfTheme(sessionStorage[user_id]['theme'])
         res['response'][
-            'text'] = f'Принято:\nТема: {translateTheme(sessionStorage[user_id]["theme"])}\n Категория: {translateC[sessionStorage[user_id]["categorie"]]}'
+            'text'] = f'Принято. Пожалуйста, уточните адрес.'
         res['response']['end_session'] = True
     else:
         if not sessionStorage[user_id]['themes'].any():
@@ -254,7 +254,7 @@ def dialog(req, res):
         return
     sessionStorage[user_id]['message'] = [req['request']['original_utterance']]
     if not sessionStorage[user_id]["askadress"]:
-        if not sessionStorage[user_id]["cats"] == 0 and sessionStorage[user_id]["savemsg"]:
+        if sessionStorage[user_id]["savemsg"]:
             sessionStorage[user_id]["firstmsg"] = sessionStorage[user_id]["message"]
             sessionStorage[user_id]["savemsg"] = False
         if not sessionStorage[user_id]["noask"]:
