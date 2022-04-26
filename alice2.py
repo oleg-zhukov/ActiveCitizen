@@ -106,7 +106,7 @@ def ask1(req, res, user_id):
         sessionStorage[user_id]['themes'] = themes_model.predict_proba(sessionStorage[user_id]['message'])
         sessionStorage[user_id]['categories'] = cat_model.predict_proba(sessionStorage[user_id]['message'])
         sessionStorage[user_id]['theme_max'] = np.argmax(sessionStorage[user_id]['themes'], axis=1)[0]
-        res['response']['text'] = f'Вы подразумевали тему "{translateTheme(sessionStorage[user_id]["theme_max"])}"?' 
+        res['response']['text'] = f'Вы подразумевали тему "{translateTheme(sessionStorage[user_id]["theme_max"])}"?'
 
     elif sessionStorage[user_id]['cats']-1 == 1:
         if ask(sessionStorage[user_id]['message']) == 1:
@@ -297,12 +297,6 @@ def dialog(req, res):
             res['response']['text'] = f'Пожалуйста, уточните адрес. Возможно вы ошиблись или не указали полное ' \
                                       f'название населенного пункта '
         return
-    '''try:
-                    call.recognize_call()
-                except:
-                    res['response']['text'] = f'Пожалуйста, уточните адрес. Возможно вы ошиблись или не указали полное ' \
-                                              f'название населенного пункта '''
-
 
     '''else:
         f_name = '/content/drive/MyDrive/Data/dataset.csv'
