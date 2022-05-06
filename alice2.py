@@ -45,20 +45,6 @@ def translateCategorie(n):
     return translateC[сategories[n]]
 
 
-def askTheme(theme):
-    ''' returns agreement or disagreement with statement about theme '''
-    print(f"Вы подразумевали {translateTheme(theme)}?")
-    ans = input()
-    return not any(x in ans.lower() for x in decline)
-
-
-def askCat(categorie):
-    ''' returns agreement or disagreement with statement about theme '''
-    print(f"Вы подразумевали категорию {translateCategorie(categorie)}?")
-    ans = input()
-    return not any(x in ans.lower() for x in decline)
-
-
 def ask(txt):
     if any(x in txt[0].lower() for x in decline):
         return -1
